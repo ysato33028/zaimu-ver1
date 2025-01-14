@@ -1,0 +1,63 @@
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #218F66;
+  color: #fff;
+  padding: 1em;
+  text-align: center;
+}
+
+main {
+  padding: 2em;
+}
+
+section {
+  margin-bottom: 2em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+#pl-table {
+  transform: scale(0.95);
+  transform-origin: top left;
+  height: 50%;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(360deg); /* 上下反転を防ぐ */
+}
+
+.double-border {
+    border-left: 3px double #000; /* 二重線の境目 */
+}
+
+button {
+  background: #800000;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #b22222;
+}

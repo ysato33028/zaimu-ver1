@@ -1,0 +1,98 @@
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  padding: 2em;
+}
+
+section {
+  margin-bottom: 2em;
+}
+
+.bold {
+  font-size: 12px;
+  font-weight: bold;
+
+}
+
+.p-comment {
+  margin: 0 0;
+  padding: 1em 1.5em;
+  background-color: #f2f2f2;
+  color: #333333;
+  text-align: left; /* テキストを左寄せ */
+  font-size: 12px;
+  margin-bottom: 30px;
+}
+
+/*画面分割の設定*/
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.column {
+    flex: 1;
+    min-width: 300px;
+    max-width: 50%;
+    margin: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+#pl-table {
+  transform: scale(0.95);
+  transform-origin: top left;
+  height: 50%;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(360deg); /* 上下反転を防ぐ */
+}
+
+.double-border {
+    border-left: 3px double #000; /* 二重線の境目 */
+}
+
+.pl-button {
+  background: #800000;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.pl-button:hover {
+  background: #b22222;
+}
+
+.delete-button {
+  background: #696969;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background: #a9a9a9;
+}

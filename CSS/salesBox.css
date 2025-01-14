@@ -1,0 +1,67 @@
+.box-design17 {
+  margin: 40px auto 20px;
+  padding: 30px 45px 10px 45px;
+  border: 2px solid #006400;
+  text-align: center;
+
+  span {
+    font-size: 40px;
+    font-weight: bold;
+    color: #dc143c;
+  }
+
+  p {
+    font-size: 10px;
+    color: #dc143c;
+    text-align: right;
+
+  }
+
+  .per-comment {
+    font-size: 14px;
+    color: #808080;
+  }
+}
+.box-design17-ttl {
+  background-color: #006400;
+  color: #fff;
+  border-radius: 100vh;
+  padding: 10px 1.5em;
+  margin: -55px 0 0 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+.box-design17-ttl::after {
+  content: '';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  border: 15px solid transparent;
+  width: 0;
+  height: 0;
+  border-top-color: #006400;
+}
+
+/*画面分割の設定*/
+.box-container {
+    padding: 15px 0 0 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.box-column {
+    flex: 1;
+    min-width: 150px;
+
+}

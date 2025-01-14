@@ -1,0 +1,63 @@
+.header-3 {
+  box-sizing: border-box;
+  width: 100%;
+  background: #006400;
+  padding: 10px 0; /* 上下の余白を追加 */
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  height: 60px;
+  padding: 0 0.8em;
+  margin: 0 auto;
+  padding-right: 100px; /* 余白を追加 */
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.header-nav-item {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.logo h1 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.header-button {
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0.5em 1.2em 0.5em 1.2em;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-login {
+  color: #999;
+}
+
+.header-post {
+  font-weight: bold;
+  color: #545454;
+  background: #ffd700;
+  border: 1px #ffd700 solid;
+  border-radius: 3px;
+}
+
+.header-post:hover {
+  font-weight: bold;
+  color: #545454;
+  background: #fffacd;
+  border: 1px #fffacd solid;
+  border-radius: 3px;
+}

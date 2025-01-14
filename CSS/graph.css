@@ -1,0 +1,72 @@
+.chart-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #f4f4f9;
+    height: 350px;
+    background: white;
+    padding: 20px;
+}
+
+.chartbottom-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #f4f4f9;
+    height: 350px;
+    background: white;
+    padding: 20px;
+    margin-bottom: 250px;
+    
+}
+
+.chartbottom2-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background-color: #f4f4f9;
+    height: 350px;
+    background: white;
+    padding: 20px;
+    margin-bottom: 300px;
+    
+}
+
+#areaCompositionChart {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    width: 500px; /* 幅を指定 */
+    height: 500px; /* 高さを指定 */
+}
+
+#scatterChart {
+    display: block;
+    margin-top: 20px;
+}
+
+#areaSelect {
+    margin-bottom: 20px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+#sellingRateChart {
+    width: 90%; /* 横幅を設定 */
+    max-height: 600px; /* 縦幅を設定 */
+    
+}
+
+#sellingRateSelect {
+    margin-bottom: 20px;
+    padding: 5px;
+    font-size: 16px;
+
+}
+

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>既存店PL表</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/header.css">
+</head>
+<body>
+<header class="header-3">
+  <div class="header-inner">
+    <div class="logo">
+      <h1>まいばすけっと既存店PLアプリ</h1>
+    </div>
+    <nav class="header-nav">
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="summary.html" target="_blank">　サマリー　</a>
+      </div>
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="pltable.html" target="_blank">既存店PL表</a>
+      </div>
+    </nav>
+  </div>
+</header>
+<main>
+<!-- 店舗名入力フォーム -->
+<label for="storeName">店舗名:</label>
+<input type="text" id="storeName" placeholder="店名を入力">
+<button id="searchButton">検索</button>
+<div id="pdf-content">
+<h2>既存店PL表 | <span id="name"></span></h2>
+  <!-- 一日当り実績 -->
+  <table id="pldayTable">
+    <thead>
+      <tr>
+        <th>一日当り実績</th>
+        <!-- 月度のヘッダーがここに追加されます -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- データがここに追加されます -->
+    </tbody>
+  </table><br>
+  <!-- 経費明細 -->
+  <table id="plTable">
+    <thead>
+      <tr>
+        <th>経費明細　　</th>
+        <!-- 月度のヘッダーがここに追加されます -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- データがここに追加されます -->
+    </tbody>
+  </table>
+</div><br>
+<button id="pdf-button">PDF生成</button>
+</main>
+<script type="module">
+// Firebase SDKをインポート
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, setDoc, doc, getDoc, deleteDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Firebaseの初期化
+const firebaseConfig = {
+  apiKey: "AIzaSyAtBYcqb7uEMK7r0O0Q6l3LNZAow29-ZzI",
+  authDomain: "test-969a3.firebaseapp.com",
+  projectId: "test-969a3",
+  storageBucket: "test-969a3.firebasestorage.app",
+  messagingSenderId: "370599779966",
+  appId: "1:370599779966:web:53792e9cf604cf09b4022f"
+};
+
+// Firebaseの初期化
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// "testDB"コレクションからデータを取得し、月度別に整理する関数
+async function getMonthlyPLData(storeName) {
+  const testDBCollection = collection(db, "testDB");
+  const q = query(testDBCollection, where("店名", "==", storeName));  // 店舗名でフィルタリング
+  const querySnapshot = await getDocs(q);
+  
+  let monthlyData = {};
+
+  querySnapshot.forEach(doc => {
+    const data = doc.data();
+    const month = data.月度; // 月度でグループ化
+
+    // 月度別データを整理
+    if (!monthlyData[month]) {
+      monthlyData[month] = {
+        総売上高: data.売上年換算,
+        売上: data.累計日販,
+        客単価: data.客単価,
+        買上点数: data.買上点数,
+        店名: data.店名
+      };
+    }
+  });
+
+  return monthlyData;
+}
+
+
+// PL表を表示
+function displayPLDayTable(monthlyData) {
+  const tableBody = document.querySelector('#pldayTable tbody');
+  const tableHeader = document.querySelector('#pldayTable thead tr');
+
+  tableBody.innerHTML = ''; // 表をクリア
+  tableHeader.innerHTML = `<th>一日当り実績</th>`; // 項目列を再設定
+
+  // 月度順にソート（最新の月度が左側に来るように）
+  const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
+    // 月度形式を 'YYYY年MM月' から Date オブジェクトに変換して比較
+    const aDate = new Date(a.replace(/年(\d{1,2})月/, (_, m) => `${m.padStart(2, '0')}-01`)); // '2024年10月' → '2024-10-01'
+    const bDate = new Date(b.replace(/年(\d{1,2})月/, (_, m) => `${m.padStart(2, '0')}-01`)); // '2023年10月' → '2023-10-01'
+    
+    return bDate - aDate; // 降順（最新月が最初）
+  });
+
+  // 最新月とその後に前月比列を配置
+  if (sortedMonths.length > 0) {
+    const thLatestMonth = document.createElement('th');
+    thLatestMonth.innerHTML = sortedMonths[0];
+    tableHeader.appendChild(thLatestMonth);
+
+    const thComparison = document.createElement('th');
+    thComparison.innerHTML = '前月比';
+    tableHeader.appendChild(thComparison);
+  }
+
+  // その後の月度を追加
+  sortedMonths.slice(1, 13).forEach(month => {
+    const th = document.createElement('th');
+    th.innerHTML = month;
+    tableHeader.appendChild(th);
+  });
+
+
+  // 項目ごとに行を追加
+  const items = ['売上', '客単価', '買上点数'];
+
+  items.forEach(item => {
+    const row = document.createElement('tr');
+    const labelCell = document.createElement('td');
+    labelCell.innerHTML = item;
+    row.appendChild(labelCell);
+
+    // 最大12か月分に限定
+    sortedMonths.slice(0, 13).forEach((month, index) => {
+      const td = document.createElement('td');
+      td.innerHTML = formatData(monthlyData[month], item);
+      row.appendChild(td);
+
+      // 前月比の計算（最新月以外の月を比較）
+      if (index === 0 && sortedMonths.length > 1) {
+        const latestMonth = sortedMonths[0]; // 最新月
+        const prevMonth = sortedMonths[1]; // 最新月の次の月を取得
+        const diffCell = document.createElement('td');
+        diffCell.innerHTML = calculateDayComparison(
+          monthlyData[latestMonth],
+          monthlyData[prevMonth],
+          item
+        );
+        row.appendChild(diffCell);
+      }
+    });
+
+    tableBody.appendChild(row);
+  });
+}
+
+function displayPLTable(monthlyData) {
+  const tableBody = document.querySelector('#plTable tbody');
+  const tableHeader = document.querySelector('#plTable thead tr');
+
+  tableBody.innerHTML = ''; // 表をクリア
+  tableHeader.innerHTML = `<th>経費明細　　</th>`; // 項目列を再設定
+
+  // 月度順にソート（最新の月度が左側に来るように）
+  const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
+    // 月度形式を 'YYYY年MM月' から Date オブジェクトに変換して比較
+    const aDate = new Date(a.replace(/年(\d{1,2})月/, (_, m) => `${m.padStart(2, '0')}-01`)); // '2024年10月' → '2024-10-01'
+    const bDate = new Date(b.replace(/年(\d{1,2})月/, (_, m) => `${m.padStart(2, '0')}-01`)); // '2023年10月' → '2023-10-01'
+    
+    return bDate - aDate; // 降順（最新月が最初）
+  });
+
+  // 最新月とその後に前月比列を配置
+  if (sortedMonths.length > 0) {
+    const thLatestMonth = document.createElement('th');
+    thLatestMonth.innerHTML = sortedMonths[0];
+    tableHeader.appendChild(thLatestMonth);
+
+    const thComparison = document.createElement('th');
+    thComparison.innerHTML = '前月比';
+    tableHeader.appendChild(thComparison);
+  }
+
+  // その後の月度を追加
+  sortedMonths.slice(1, 13).forEach(month => {
+    const th = document.createElement('th');
+    th.innerHTML = month;
+    tableHeader.appendChild(th);
+  });
+
+
+  // 項目ごとに行を追加
+  const items = ['総売上高'];
+
+  items.forEach(item => {
+    const row = document.createElement('tr');
+    const labelCell = document.createElement('td');
+    labelCell.innerHTML = item;
+    row.appendChild(labelCell);
+
+    sortedMonths.slice(0, 13).forEach((month, index) => {
+      const td = document.createElement('td');
+      td.innerHTML = formatData(monthlyData[month], item);
+      row.appendChild(td);
+
+      // 前月比の計算（最新月以外の月を比較）
+      if (index === 0 && sortedMonths.length > 1) {
+        const latestMonth = sortedMonths[0]; // 最新月
+        const prevMonth = sortedMonths[1]; // 最新月の次の月を取得
+        const diffCell = document.createElement('td');
+        diffCell.innerHTML = calculateComparison(
+          monthlyData[latestMonth],
+          monthlyData[prevMonth],
+          item
+        );
+        row.appendChild(diffCell);
+      }
+    });
+
+    tableBody.appendChild(row);
+  });
+}
+
+// データのフォーマット関数（数値を整形）
+function formatData(monthData, item) {
+  if (item === '買上点数') {
+    return monthData[item].toFixed(2);
+  }
+  return Math.round(monthData[item]).toLocaleString();
+}
+
+// 前月比計算関数
+function calculateDayComparison(currentMonth, prevMonth, item) {
+  if (!prevMonth) return '-'; // 前月データがない場合
+
+  let result;
+  if (item === '売上') {
+    // 前月比（%）
+    result = ((currentMonth[item] / prevMonth[item]) * 100).toFixed(2);
+    return `${result}%`; // 例: 110.00% や 95.00%
+  } else if (item === '客単価' || item === '買上点数') {
+    // 差異
+    result = (currentMonth[item] - prevMonth[item]).toFixed(2);
+    return result > 0 ? `+${result}` : `▲${Math.abs(result)}`;
+  }
+}
+
+// 前月比計算関数
+function calculateComparison(currentMonth, prevMonth, item) {
+  if (!prevMonth) return '-'; // 前月データがない場合
+
+  let result;
+  if (item === '総売上高') {
+    // 前月比（%）
+    result = ((currentMonth[item] / prevMonth[item]) * 100).toFixed(2);
+    return `${result}%`; // 例: 110.00% や 95.00%
+  } else if (item === '客単価' || item === '買上点数') {
+    // 差異
+    result = (currentMonth[item] - prevMonth[item]).toFixed(2);
+    return result > 0 ? `+${result}` : `▲${Math.abs(result)}`;
+  }
+}
+
+// 検索ボタンのクリックイベント
+document.getElementById('searchButton').addEventListener('click', () => {
+  const storeName = document.getElementById('storeName').value.trim();
+  if (storeName) {
+    // 入力された店舗名を <h2> に反映
+    document.getElementById('name').textContent = storeName;
+
+    // データ取得と表示
+    getMonthlyPLData(storeName).then(monthlyData => {
+      displayPLDayTable(monthlyData);
+      displayPLTable(monthlyData);
+    }).catch(error => {
+      console.error("Error getting documents: ", error);
+    });
+  } else {
+    alert('店舗名を入力してください');
+  }
+});
+
+// PDFに変換
+document.getElementById("pdf-button").addEventListener("click", async () => {
+    const { jsPDF } = window.jspdf;
+    const name = document.getElementById("name").textContent || "";
+
+    try {
+        const content = document.getElementById("pdf-content");
+        const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "px",
+            format: "a4",
+        });
+
+        // PDFページの寸法を取得
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        // 余白の設定（単位はpx）
+        const margin = 20; // 左右および上下の余白を統一
+
+        // 有効なコンテンツ領域を計算
+        const contentWidth = pageWidth - margin * 2;
+        const contentHeight = pageHeight - margin * 2;
+
+        // html2canvasでCanvasを作成
+        const canvas = await html2canvas(content, {
+            scrollY: -window.scrollY,
+            scale: 2, // 高解像度で描画
+        });
+
+        const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+        // Canvasのサイズを取得
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+         // スケールを計算
+        const scale = Math.min(contentWidth / canvasWidth, contentHeight / canvasHeight);
+
+        const imgWidth = canvasWidth * scale;
+        const imgHeight = canvasHeight * scale;
+
+        // 画像をPDFに追加
+        pdf.addImage(imgData, "JPEG", margin, margin, imgWidth, imgHeight);
+
+        pdf.save(`【${name}】既存店PL表.pdf`);
+    } catch (error) {
+        console.error("PDF生成エラー:", error);
+        alert("PDF生成中にエラーが発生しました。詳細をコンソールで確認してください。");
+    }
+});
+
+</script>
+</body>
+</html>

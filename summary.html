@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>まいばすけっと既存店PL共有アプリ</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/header.css">
+  <link rel="stylesheet" href="CSS/salesBox.css">
+  <link rel="stylesheet" href="CSS/graph.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="header-3">
+  <div class="header-inner">
+    <div class="logo">
+      <h1>まいばすけっと既存店PLアプリ</h1>
+    </div>
+    <nav class="header-nav">
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="summary.html" target="_blank">　サマリー　</a>
+      </div>
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="pltable.html" target="_blank">既存店PL表</a>
+      </div>
+    </nav>
+  </div>
+</header>
+<main>
+<h2>今月期</h2>
+<div class="container">
+  <div class="box-design17">
+    <h3 class="box-design17-ttl">売上高（今月）</h3>
+    <div class="box-container">
+      <div class="box-column">
+      <span class="per-comment">
+      前年比
+      </span><br>
+      <span class="per-comment">
+      +1.07％
+      </span>
+      </div>
+      <div class="box-column">
+      <span>
+        25,213
+        <p>百万円</p>
+      </span>
+    </div>
+  </div>
+  </div> 
+  <div class="box-design17">
+    <h3 class="box-design17-ttl">営業利益（今月）</h3>
+    <div class="box-container">
+      <div class="box-column">
+      <span class="per-comment">
+      前年比
+      </span><br>
+      <span class="per-comment">
+      ▲　％
+      </span>
+      </div>
+      <div class="box-column">
+      <span>
+        7,904
+        <p>百万円</p>
+      </span>
+    </div>
+  </div>
+  </div>
+  <div class="box-design17">
+    <h3 class="box-design17-ttl">全店客数（今月）</h3>
+    <div class="box-container">
+      <div class="box-column">
+      <span class="per-comment">
+      前年比
+      </span><br>
+      <span class="per-comment">
+      ▲　％
+      </span>
+      </div>
+      <div class="box-column">
+      <span>
+        3,198
+      <p>万人</p>
+      </span>
+    </div>
+  </div>
+  </div>
+</div>
+<h2>月別売上推移</h2>
+<div class="p-comment">目的: 売上の変動パターンを理解。</div>
+<div class="chart-container">
+    <canvas id="salesGraph"></canvas>
+</div>
+<h2>月別営業利益推移</h2>
+<div class="p-comment">目的: 利益の変動パターンを理解。</div>
+<div class="chart-container">
+    <canvas id="profitGraph"></canvas>
+</div>
+<h2>エリア別売上構成比</h2>
+<div class="p-comment">目的: 各エリアの売上割合と地域ごとの影響度を把握。</div>
+<div class="chartbottom-container">
+    <div style="width: 50%; margin: auto;">
+        <canvas id="areaCompositionChart"></canvas>
+    </div>
+</div>
+<h2>客単価・買上点数の散布図</h2>
+<div class="p-comment">目的: 買上点数が多い店舗ほど売上が高い傾向があるかどうか、データに基づいて関係性を見つけます。</div>
+<div class="chartbottom2-container">
+    <div style="width: 70%; margin: auto; text-align: center;">
+        <label for="areaSelect">エリア選択</label>
+        <select id="areaSelect">
+            <option value="江東・江戸川1">江東・江戸川1</option>
+            <option value="江東・江戸川2">江東・江戸川2</option>
+        </select>
+        <canvas id="scatterChart" style="margin-top: 20px;"></canvas>
+    </div>
+</div>
+<h2>売変率・廃棄率比較</h2>
+<div class="p-comment">売変率が高く廃棄率が低い場合: 適切な割引戦略で在庫を効果的に消化。<br>
+売変率が低く廃棄率が高い場合: 過剰在庫が原因で廃棄が増加。割引施策を検討する必要あり。<br>
+両方が高い場合: 割引施策が過剰で在庫管理が不十分。売変率と廃棄率のバランスを見直す必要あり。<br></div>
+<label for="sellingRateSelect">エリア選択:</label>
+    <select id="sellingRateSelect">
+        <option value="江東・江戸川1">江東・江戸川1</option>
+        <option value="江東・江戸川2">江東・江戸川2</option>
+    </select>
+    <div class="chart-container">
+    <canvas id="sellingRateChart"></canvas>
+    </div>
+</main>
+<script src="js/sales-graph.js"></script>
+<script src="js/profit-graph.js"></script>
+<script src="js/area-composition.js"></script>
+<script src="js/scatter-graph.js"></script>
+<script src="js/sellingRate.js"></script>
+</body>
+</html>
