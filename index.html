@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>まいばすけっと既存店PL共有アプリ</title>
+  <link rel="stylesheet" href="CSS/style.css">
+  <link rel="stylesheet" href="CSS/header.css">
+  <link rel="stylesheet" href="CSS/select.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- xlsxライブラリ -->
+</head>
+<body>
+<header class="header-3">
+  <div class="header-inner">
+    <div class="logo">
+      <h1>まいばすけっと既存店PLアプリ</h1>
+    </div>
+    <nav class="header-nav">
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="summary.html" target="_blank">　サマリー　</a>
+      </div>
+      <div class="header-nav-item">
+        <a class="header-button header-post" href="pltable.html" target="_blank">既存店PL表</a>
+      </div>
+    </nav>
+  </div>
+</header>
+  <main>
+
+      <div class="container">
+      <div class="column">
+        <h2>店舗データのアップロード</h2>
+          <input type="file" id="file-upload" accept=".xlsx, .xls">
+          <button id="upload-button" onclick="uploadExcel()">アップロード</button><br>
+          <div id="progress-container" style="display:none; width: 100%; background-color: #f3f3f3; border-radius: 10px; height: 5px; margin-top: 10px;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #00aec9; border-radius: 10px;"></div>
+      　　</div>
+      </div>
+      <div class="column">
+      </div>
+      </div>
+      <div class="container">
+      <div class="column">
+        <h2>店舗検索</h2>
+        <input type="text" id="search-name" placeholder="店名を入力">
+        <button id="search-button" onclick="searchStore()">検索</button>
+        <p>検索結果: <span id="search-result"></span></p>
+      </div>
+      <div class="column">
+        <h2>エリア</h2>
+          <div class="selectdiv">
+            <select id="location-filter">
+              <option value="all">すべて</option>
+              <option value="江東・江戸川1">江東・江戸川1</option>
+              <option value="江東・江戸川2">江東・江戸川2</option>
+              <option value="江東・江戸川3">江東・江戸川3</option>
+              <option value="江東・江戸川4">江東・江戸川4</option>
+              <option value="江東・江戸川5">江東・江戸川5</option>
+              <option value="江東・江戸川6">江東・江戸川6</option>
+              <option value="江東・江戸川7">江東・江戸川7</option>
+              <option value="江東・江戸川8">江東・江戸川8</option>
+              <option value="江東・江戸川9">江東・江戸川9</option>
+              <option value="江東・江戸川10">江東・江戸川10</option>
+              <option value="新宿・世田谷1">新宿・世田谷1</option>
+              <option value="新宿・世田谷2">新宿・世田谷2</option>
+              <option value="新宿・世田谷3">新宿・世田谷3</option>
+              <option value="新宿・世田谷4">新宿・世田谷4</option>
+              <option value="新宿・世田谷5">新宿・世田谷5</option>
+              <option value="新宿・世田谷6">新宿・世田谷6</option>
+              <option value="新宿・世田谷7">新宿・世田谷7</option>
+              <option value="新宿・世田谷8">新宿・世田谷8</option>
+              <option value="新宿・世田谷9">新宿・世田谷9</option>
+              <option value="新宿・世田谷10">新宿・世田谷10</option>
+              <option value="千代田・川口1">千代田・川口1</option>
+              <option value="千代田・川口2">千代田・川口2</option>
+              <option value="千代田・川口3">千代田・川口3</option>
+              <option value="千代田・川口4">千代田・川口4</option>
+              <option value="千代田・川口5">千代田・川口5</option>
+              <option value="千代田・川口6">千代田・川口6</option>
+              <option value="千代田・川口7">千代田・川口7</option>
+              <option value="千代田・川口8">千代田・川口8</option>
+              <option value="千代田・川口9">千代田・川口9</option>
+              <option value="川崎1">川崎1</option>
+              <option value="川崎2">川崎2</option>
+              <option value="川崎3">川崎3</option>
+              <option value="川崎4">川崎4</option>
+              <option value="川崎5">川崎5</option>
+              <option value="川崎6">川崎6</option>
+              <option value="川崎7">川崎7</option>
+              <option value="川崎8">川崎8</option>
+              <option value="川崎9">川崎9</option>
+              <option value="台東・葛飾1">台東・葛飾1</option>
+              <option value="台東・葛飾2">台東・葛飾2</option>
+              <option value="台東・葛飾3">台東・葛飾3</option>
+              <option value="台東・葛飾4">台東・葛飾4</option>
+              <option value="台東・葛飾5">台東・葛飾5</option>
+              <option value="台東・葛飾6">台東・葛飾6</option>
+              <option value="台東・葛飾7">台東・葛飾7</option>
+              <option value="台東・葛飾8">台東・葛飾8</option>
+              <option value="台東・葛飾9">台東・葛飾9</option>
+              <option value="台東・葛飾10">台東・葛飾10</option>
+              <option value="新業態">新業態</option>
+            </select>
+          </div><br><br>
+            <p>現在の店舗数: <span id="total-count"></span></p>
+      </div>
+      </div>
+      
+      <!-- データ表示用のテーブル -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>店舗名</th>
+                <th>最新月度</th>
+                <th>エリア</th>
+                <th>売上</th>
+                <th>日販</th>
+                <th>客単価</th>
+                <th>買上点数</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- データがここに挿入されます -->
+        </tbody>
+    </table>
+
+  </main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, setDoc, doc, getDoc, deleteDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Firebaseの初期化
+const firebaseConfig = {
+  apiKey: "AIzaSyAtBYcqb7uEMK7r0O0Q6l3LNZAow29-ZzI",
+  authDomain: "test-969a3.firebaseapp.com",
+  projectId: "test-969a3",
+  storageBucket: "test-969a3.firebasestorage.app",
+  messagingSenderId: "370599779966",
+  appId: "1:370599779966:web:53792e9cf604cf09b4022f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// URLからstoreIdを取得
+const params = new URLSearchParams(window.location.search);
+
+// Firestoreから最新の月度データを取得してHTMLに表示
+async function fetchAndDisplayData(selectedArea = "all") {
+  const tableBody = document.getElementById("table-body");
+  const totalCountSpan = document.getElementById("total-count"); // 店舗総数を表示
+
+  // Firestoreからすべてのデータを取得
+  const querySnapshot = await getDocs(collection(db, "testDB"));
+
+  // 月度を特定するためのセットを準備
+  const months = new Set();
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data["月度"]) {
+      months.add(data["月度"]);
+    }
+  });
+
+  // 月度を年と月に分けて最新の年月を特定
+  const sortedMonths = Array.from(months).sort((a, b) => {
+    const [yearA, monthA] = a.split("年").map((part) => parseInt(part.replace("月", ""), 10));
+    const [yearB, monthB] = b.split("年").map((part) => parseInt(part.replace("月", ""), 10));
+    return yearB - yearA || monthB - monthA; // 年を比較し、同じ場合は月を比較
+  });
+
+  const latestMonth = sortedMonths[0];
+
+  // 最新の月度でフィルタリング
+  const filteredDocs = querySnapshot.docs.filter(doc => {
+    const data = doc.data();
+    const isLatestMonth = data["月度"] === latestMonth;
+    const isMatchingArea = selectedArea === "all" || data["エリア"] === selectedArea;
+    return isLatestMonth && isMatchingArea;
+  });
+
+  // テーブルの内容をクリア
+  tableBody.innerHTML = "";
+
+  // データのカウントを取得
+  const totalCount = filteredDocs.length;
+  totalCountSpan.textContent = Math.round(totalCount).toLocaleString();
+
+  filteredDocs.forEach((doc) => {
+    const data = doc.data();
+
+    // 必要なデータを抽出
+    const { 店名, 月度, エリア } = data;
+
+    // プロパティ名を部分文字列で検索
+    function cleanKey(key) {
+      return key.replace(/\s+/g, "").replace(/↵/g, "").replace(/"/g, "");
+    }
+
+    function findKeyByPartialName(partialName) {
+      const cleanedPartial = cleanKey(partialName);
+      return Object.keys(data).find((key) =>
+        cleanKey(key).includes(cleanedPartial)
+      );
+    }
+
+    // キー名を部分文字列で検索
+    const salesKey = findKeyByPartialName("売上年");
+    const dailySalesKey = findKeyByPartialName("日販");
+    const customerSpendingKey = findKeyByPartialName("客単価");
+    const numberofItemsPurchasedKey = findKeyByPartialName("買上点数");
+
+    // 各データの取得
+    const 売上 = Math.round(data[salesKey])?.toLocaleString() || "-"; // 売上
+    const 日販 = Math.round(data[dailySalesKey])?.toLocaleString() || "-"; // 日販
+    const 客単価 = Math.round(data[customerSpendingKey])?.toLocaleString() || "-"; // 客単価
+    const 買上点数 = data[numberofItemsPurchasedKey]?.toFixed(2) || "-"; // 買上点数
+
+    // 新しい行を作成
+    const row = document.createElement("tr");
+
+    // 各セルを作成して追加
+    const 店名Cell = document.createElement("td");
+    店名Cell.textContent = 店名;
+    row.appendChild(店名Cell);
+
+    const 月度Cell = document.createElement("td");
+    月度Cell.textContent = 月度;
+    row.appendChild(月度Cell);
+
+    const エリアCell = document.createElement("td");
+    エリアCell.textContent = エリア || "-"; // エリアがない場合は "-"
+    row.appendChild(エリアCell);
+
+    const 売上Cell = document.createElement("td");
+    売上Cell.textContent = 売上;
+    row.appendChild(売上Cell);
+
+    const 日販Cell = document.createElement("td");
+    日販Cell.textContent = 日販;
+    row.appendChild(日販Cell);
+
+    const 客単価Cell = document.createElement("td");
+    客単価Cell.textContent = 客単価;
+    row.appendChild(客単価Cell);
+
+    const 買上点数Cell = document.createElement("td");
+    買上点数Cell.textContent = 買上点数;
+    row.appendChild(買上点数Cell);
+
+    // テーブルに行を追加
+    tableBody.appendChild(row);
+  });
+}
+
+// フィルタリングイベントリスナー
+document.getElementById("location-filter").addEventListener("change", (event) => {
+  const selectedArea = event.target.value;
+  fetchAndDisplayData(selectedArea);
+});
+
+// ページが読み込まれた際に初期データを表示
+window.onload = () => fetchAndDisplayData();
+
+// キーを整形する関数
+function cleanFieldName(name) {
+    return name.replace(/\s+/g, "").replace(/↵/g, "").replace(/"/g, "");
+}
+
+// データキーをクリーンアップする関数
+function cleanDataKeys(data) {
+    const cleanedData = {};
+    for (const key in data) {
+        const newKey = cleanFieldName(key.trim()); // 不要なスペースと特殊文字を削除
+        cleanedData[newKey] = data[key];
+    }
+    return cleanedData;
+}
+
+// Excelファイルの読み込みおよびデータアップロードの処理
+async function uploadExcel() {
+    const fileInput = document.getElementById("file-upload");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("エクセルファイルを選択してください。");
+        return;
+    }
+
+    // プログレスバーの初期設定
+    const progressContainer = document.getElementById("progress-container");
+    const progressBar = document.getElementById("progress-bar");
+    progressContainer.style.display = "block";
+    progressBar.style.width = "0%";
+
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet, { raw: true });
+
+        if (!jsonData.length) {
+            alert("シートにデータがありません。");
+            progressContainer.style.display = "none";
+            return;
+        }
+
+        const totalRows = jsonData.length;
+        let uploadedRows = 0;
+
+        try {
+            // データ整形とFirestoreへのアップロード
+            for (const row of jsonData) {
+                const cleanedRow = cleanDataKeys(row);
+                const { 月度, 店名, ...details } = cleanedRow;
+
+                if (!月度 || !店名) {
+                    console.warn("月度または店名が欠落しています。スキップ:", cleanedRow);
+                    continue;
+                }
+
+                // Firestoreのコレクション/ドキュメント参照
+                const docRef = doc(db, "testDB", `${月度}_${店名}`);  // 月度と店名をキーにして個別ドキュメントを作成
+
+                // 月度と店名をフィールドとしてFirestoreに追加
+                const docData = {
+                    月度: 月度,
+                    店名: 店名,
+                    ...details
+                };
+
+                // Firestoreにデータを追加
+                await setDoc(docRef, docData, { merge: true });
+
+                // プログレスバー更新
+                uploadedRows++;
+                const progress = Math.round((uploadedRows / totalRows) * 100);
+                progressBar.style.width = `${progress}%`;
+            }
+
+            alert("すべてのデータが正常にアップロードされました！");
+        } catch (error) {
+            console.error("データアップロード中にエラーが発生しました:", error);
+            alert("データアップロード中にエラーが発生しました。");
+        } finally {
+            // プログレスバーを非表示にする
+            progressContainer.style.display = "none";
+        }
+    };
+
+    reader.onerror = () => {
+        console.error("ファイルの読み込みに失敗しました。");
+        alert("ファイルの読み込みに失敗しました。");
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+// HTML要素と関数を接続
+window.uploadExcel = uploadExcel;
+
+
+// 店舗を検索
+async function searchStore() {
+  const searchName = document.getElementById("search-name").value.trim();
+  const searchResult = document.getElementById("search-result");
+  const storeList = document.getElementById("table-body");
+  storeList.innerHTML = "";
+
+  if (!searchName) {
+    searchResult.textContent = "店名を入力してください。";
+    return;
+  }
+
+  const querySnapshot = await getDocs(collection(db, "testDB"));
+
+  // 部分一致でフィルタリング
+  const filteredDocs = querySnapshot.docs.filter(doc => 
+    doc.data()["店名"] && doc.data()["店名"].includes(searchName)
+  );
+
+  if (filteredDocs.length === 0) {
+    searchResult.textContent = "該当する店舗は見つかりませんでした。";
+    return;
+  }
+
+  searchResult.textContent = `${filteredDocs.length} 件の結果が見つかりました。`;
+
+  filteredDocs.forEach((doc) => {
+    const data = doc.data();
+    const row = document.createElement("tr");
+    
+    // 必要なプロパティ名を部分文字列で検索
+    function cleanKey(key) {
+      return key.replace(/\s+/g, "").replace(/↵/g, "").replace(/"/g, "");
+    }
+
+    function findKeyByPartialName(partialName) {
+      const cleanedPartial = cleanKey(partialName);
+      return Object.keys(data).find((key) =>
+        cleanKey(key).includes(cleanedPartial)
+      );
+    }
+
+    const salesKey = findKeyByPartialName(`売上年`);
+    const dailySalesKey = findKeyByPartialName("日販");
+    const customerSpendingKey = findKeyByPartialName("客単価");
+    const numberofItemsPurchasedKey = findKeyByPartialName("買上点数");
+
+    row.innerHTML = `
+      <td>${data["店名"] || "-"}</td>
+      <td>${data["月度"] || "-"}</td>
+      <td>${data["エリア"] || "-"}</td>
+      <td>${Math.round(data[salesKey])?.toLocaleString() || "-"}</td>
+      <td>${Math.round(data[dailySalesKey])?.toLocaleString() || "-"}</td>
+      <td>${Math.round(data[customerSpendingKey])?.toLocaleString() || "-"}</td>
+      <td>${data[numberofItemsPurchasedKey]?.toFixed(2) || "-"}</td>
+    `;
+    storeList.appendChild(row);
+  });
+}
+
+// 関数をグローバルに公開
+window.searchStore = searchStore;
+
+// 担当一覧に遷移する関数
+function goToMailList() {
+  window.open('mailList.html', '_blank'); // 新しいタブでPDFシートに遷移
+}
+
+// ボタンにクリックイベントを設定
+document.addEventListener('DOMContentLoaded', () => {
+  const button = document.getElementById('manager-button');
+  if (button) {
+    button.addEventListener('click', goToMailList);
+  }
+});
+
+// PL表に遷移する関数
+function goToPL() {
+  window.open('pltable.html', '_blank'); // 新しいタブでPDFシートに遷移
+}
+
+// ボタンにクリックイベントを設定
+document.addEventListener('DOMContentLoaded', () => {
+  const button = document.getElementById('pl-button');
+  if (button) {
+    button.addEventListener('click', goToPL);
+  }
+});
+
+</script>
+<!-- Excel用SheetJSのライブラリ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</body>
+</html>
